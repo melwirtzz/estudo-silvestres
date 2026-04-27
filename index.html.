@@ -1,0 +1,522 @@
+```html
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Super App: Silvestres USJT</title>
+    <!-- Tailwind CSS via CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome para Ícones -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800;900&display=swap');
+        
+        :root {
+            --primary: #059669; /* Emerald 600 */
+            --secondary: #047857; /* Emerald 700 */
+            --bg-color: #f8fafc;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-color);
+            -webkit-tap-highlight-color: transparent;
+            overscroll-behavior-y: none;
+            color: #1e293b;
+        }
+
+        /* Ocultar barra de rolagem mas permitir rolagem */
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+        /* Animações e Transições */
+        .tab-content {
+            display: none;
+            animation: slideUpFade 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .tab-content.active { display: block; }
+        
+        @keyframes slideUpFade {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Estilos da Navigation Bar */
+        .nav-btn {
+            color: #94a3b8;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+        .nav-btn.active {
+            color: var(--primary);
+            transform: translateY(-5px);
+        }
+        .nav-btn.active::after {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 6px;
+            height: 6px;
+            background-color: var(--primary);
+            border-radius: 50%;
+        }
+
+        /* Flashcards 3D Flip */
+        .flip-container {
+            perspective: 1000px;
+            width: 100%;
+            height: 300px;
+        }
+        .flipper {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            transition: transform 0.6s;
+            transform-style: preserve-3d;
+            cursor: pointer;
+        }
+        .flip-container.flipped .flipper {
+            transform: rotateY(180deg);
+        }
+        .front, .back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            -webkit-backface-visibility: hidden;
+            border-radius: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 2rem;
+            text-align: center;
+            box-shadow: 0 10px 25px -5px rgba(0,0,0,0.1);
+        }
+        .front { background: linear-gradient(135deg, var(--primary), var(--secondary)); color: white; }
+        .back { background: white; color: #1e293b; transform: rotateY(180deg); border: 2px solid var(--primary); }
+
+        /* Classes Customizadas para os Cards de Classes */
+        .card-peixes { border-left-color: #3b82f6; } /* blue */
+        .card-anfibios { border-left-color: #10b981; } /* emerald */
+        .card-repteis { border-left-color: #f59e0b; } /* amber */
+        .card-aves { border-left-color: #ec4899; } /* pink */
+        .card-mamiferos { border-left-color: #8b5cf6; } /* purple */
+
+    </style>
+</head>
+<body class="flex flex-col h-screen overflow-hidden max-w-md mx-auto shadow-2xl bg-white relative">
+
+    <!-- HEADER GLOBAL -->
+    <header class="bg-white px-6 pt-10 pb-4 shrink-0 shadow-sm z-20">
+        <div class="flex justify-between items-center">
+            <div>
+                <h1 class="text-2xl font-black text-slate-800 tracking-tight">UC Silvestres</h1>
+                <p class="text-emerald-600 font-bold text-xs uppercase tracking-widest">USJT • Prof. Celso</p>
+            </div>
+            <div class="bg-red-50 text-red-600 px-3 py-1.5 rounded-xl font-bold text-xs flex items-center gap-1 border border-red-100">
+                <i class="fa-solid fa-fire"></i> Prova 05/05
+            </div>
+        </div>
+    </header>
+
+    <!-- ÁREA DE SCROLL PRINCIPAL -->
+    <main class="flex-1 overflow-y-auto pb-28 pt-4 px-5 no-scrollbar" id="mainScroll">
+
+        <!-- ABA 1: ATIVIDADE (Respostas para copiar) -->
+        <section id="tab-atividade" class="tab-content active">
+            <div class="bg-emerald-50 border border-emerald-200 rounded-2xl p-5 mb-6">
+                <h2 class="font-black text-emerald-800 text-lg mb-2 flex items-center gap-2">
+                    <i class="fa-solid fa-file-word"></i> Respostas da Reposição
+                </h2>
+                <p class="text-sm text-emerald-700 leading-relaxed mb-4">
+                    Baseado no documento do Prof. Celso Martins. Copie os textos abaixo diretamente para a sua atividade.
+                </p>
+            </div>
+
+            <div class="space-y-6">
+                <!-- Circulação -->
+                <div>
+                    <h3 class="font-black text-slate-800 text-lg border-b-2 border-slate-100 pb-2 mb-3">1a) Tipos de Circulação</h3>
+                    <div class="space-y-3">
+                        <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-100">
+                            <span class="font-bold text-red-600 uppercase text-xs">Aberta</span>
+                            <p class="text-sm mt-1 text-slate-600">O fluido (hemolinfa) não flui exclusivamente dentro de vasos; sai para cavidades (lacunas) e banha os tecidos. (Comum em invertebrados).</p>
+                        </div>
+                        <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-100">
+                            <span class="font-bold text-red-600 uppercase text-xs">Fechada</span>
+                            <p class="text-sm mt-1 text-slate-600">O sangue circula de forma contínua e exclusivamente dentro de vasos (artérias, veias, capilares). (Vertebrados).</p>
+                        </div>
+                        <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-100">
+                            <span class="font-bold text-red-600 uppercase text-xs">Completa</span>
+                            <p class="text-sm mt-1 text-slate-600">O coração possui separação total entre os ventrículos; <b>não ocorre mistura</b> entre sangue venoso e arterial. (Aves e Mamíferos).</p>
+                        </div>
+                        <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-100">
+                            <span class="font-bold text-red-600 uppercase text-xs">Incompleta</span>
+                            <p class="text-sm mt-1 text-slate-600">Ocorre mistura de sangue venoso e arterial no coração (devido a um ventrículo único ou septo parcial). (Anfíbios e Répteis).</p>
+                        </div>
+                        <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-100">
+                            <span class="font-bold text-red-600 uppercase text-xs">Simples</span>
+                            <p class="text-sm mt-1 text-slate-600">O sangue passa apenas <b>uma vez</b> pelo coração num ciclo completo. (Peixes).</p>
+                        </div>
+                        <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-100">
+                            <span class="font-bold text-red-600 uppercase text-xs">Dupla</span>
+                            <p class="text-sm mt-1 text-slate-600">O sangue passa <b>duas vezes</b> pelo coração num ciclo (circulação pulmonar e sistêmica). (Anfíbios a Mamíferos).</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Reprodução -->
+                <div>
+                    <h3 class="font-black text-slate-800 text-lg border-b-2 border-slate-100 pb-2 mb-3 mt-6">1b) Desenvolvimento</h3>
+                    <div class="space-y-3">
+                        <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-100">
+                            <span class="font-bold text-amber-600 uppercase text-xs">Ovíparos</span>
+                            <p class="text-sm mt-1 text-slate-600">Desenvolvimento em ovo fora do corpo materno. Nutrição exclusiva pelo vitelo (gema).</p>
+                        </div>
+                        <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-100">
+                            <span class="font-bold text-amber-600 uppercase text-xs">Ovovivíparos</span>
+                            <p class="text-sm mt-1 text-slate-600">Ovo retido na fêmea até eclodir. Nutrição ainda depende apenas do ovo, sem placenta.</p>
+                        </div>
+                        <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-100">
+                            <span class="font-bold text-amber-600 uppercase text-xs">Vivíparos</span>
+                            <p class="text-sm mt-1 text-slate-600">Desenvolvimento no útero materno com troca direta de nutrientes via placenta.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Excreção -->
+                <div>
+                    <h3 class="font-black text-slate-800 text-lg border-b-2 border-slate-100 pb-2 mb-3 mt-6">1c) Excreção Nitrogenada</h3>
+                    <div class="space-y-3">
+                        <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-100">
+                            <span class="font-bold text-blue-600 uppercase text-xs">Amoniotélicos</span>
+                            <p class="text-sm mt-1 text-slate-600">Excretam <b>amônia</b>. Alta toxicidade, requer muita água ambiental (Ex: Peixes).</p>
+                        </div>
+                        <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-100">
+                            <span class="font-bold text-blue-600 uppercase text-xs">Ureotélicos</span>
+                            <p class="text-sm mt-1 text-slate-600">Excretam <b>ureia</b>. Toxicidade moderada. (Ex: Mamíferos, Anfíbios).</p>
+                        </div>
+                        <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-100">
+                            <span class="font-bold text-blue-600 uppercase text-xs">Uricotélicos</span>
+                            <p class="text-sm mt-1 text-slate-600">Excretam <b>ácido úrico</b>. Pouco tóxico e quase insolúvel. Permite economia extrema de água. (Ex: Aves, Répteis).</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ABA 2: RESUMOS POR CLASSE -->
+        <section id="tab-classes" class="tab-content">
+            <h2 class="text-2xl font-black text-slate-800 mb-6">Fisiologia Comparada</h2>
+
+            <div class="space-y-4">
+                <!-- PEIXES -->
+                <div class="bg-white rounded-2xl shadow-sm border-l-4 border-slate-200 card-peixes overflow-hidden">
+                    <div class="p-4 bg-blue-50/50 flex items-center justify-between cursor-pointer" onclick="toggleAccordion('acc-peixes')">
+                        <h3 class="font-black text-blue-900 flex items-center gap-2"><i class="fa-solid fa-fish text-blue-500"></i> Peixes Ósseos</h3>
+                        <i class="fa-solid fa-chevron-down text-blue-300 transition-transform" id="icon-peixes"></i>
+                    </div>
+                    <div class="p-4 hidden text-sm text-slate-600 space-y-2 border-t border-slate-100" id="acc-peixes">
+                        <p><b>Coração:</b> 2 cavidades (1 átrio, 1 ventrículo).</p>
+                        <p><b>Circulação:</b> Simples e Fechada. (Só passa sangue venoso no coração).</p>
+                        <p><b>Excreção:</b> Amoniotélicos (Amônia).</p>
+                    </div>
+                </div>
+
+                <!-- ANFÍBIOS -->
+                <div class="bg-white rounded-2xl shadow-sm border-l-4 border-slate-200 card-anfibios overflow-hidden">
+                    <div class="p-4 bg-emerald-50/50 flex items-center justify-between cursor-pointer" onclick="toggleAccordion('acc-anfibios')">
+                        <h3 class="font-black text-emerald-900 flex items-center gap-2"><i class="fa-solid fa-frog text-emerald-500"></i> Anfíbios</h3>
+                        <i class="fa-solid fa-chevron-down text-emerald-300 transition-transform" id="icon-anfibios"></i>
+                    </div>
+                    <div class="p-4 hidden text-sm text-slate-600 space-y-2 border-t border-slate-100" id="acc-anfibios">
+                        <p><b>Coração:</b> 3 cavidades (2 átrios, 1 ventrículo).</p>
+                        <p><b>Circulação:</b> Dupla e Incompleta (mistura no ventrículo único).</p>
+                        <p><b>Excreção:</b> Ureotélicos (Adultos) / Amoniotélicos (Girinos).</p>
+                        <p><b>Respiração:</b> Pulmonar e Cutânea (muito importante).</p>
+                    </div>
+                </div>
+
+                <!-- RÉPTEIS -->
+                <div class="bg-white rounded-2xl shadow-sm border-l-4 border-slate-200 card-repteis overflow-hidden">
+                    <div class="p-4 bg-amber-50/50 flex items-center justify-between cursor-pointer" onclick="toggleAccordion('acc-repteis')">
+                        <h3 class="font-black text-amber-900 flex items-center gap-2"><i class="fa-solid fa-snake text-amber-500"></i> Répteis</h3>
+                        <i class="fa-solid fa-chevron-down text-amber-300 transition-transform" id="icon-repteis"></i>
+                    </div>
+                    <div class="p-4 hidden text-sm text-slate-600 space-y-2 border-t border-slate-100" id="acc-repteis">
+                        <p><b>Coração:</b> 3 cavidades com <b>Septo de Sabatier</b> parcial. Crocodilianos têm 4 cavidades mas misturam no <b>Forame de Panizza</b>.</p>
+                        <p><b>Excreção:</b> Uricotélicos (Ácido Úrico).</p>
+                        <p><b>Clínica:</b> Têm Sistema Porta-Renal. Necessitam de lâmpada UVB para vitamina D3.</p>
+                    </div>
+                </div>
+
+                <!-- AVES -->
+                <div class="bg-white rounded-2xl shadow-sm border-l-4 border-slate-200 card-aves overflow-hidden">
+                    <div class="p-4 bg-pink-50/50 flex items-center justify-between cursor-pointer" onclick="toggleAccordion('acc-aves')">
+                        <h3 class="font-black text-pink-900 flex items-center gap-2"><i class="fa-solid fa-dove text-pink-500"></i> Aves</h3>
+                        <i class="fa-solid fa-chevron-down text-pink-300 transition-transform" id="icon-aves"></i>
+                    </div>
+                    <div class="p-4 hidden text-sm text-slate-600 space-y-2 border-t border-slate-100" id="acc-aves">
+                        <p><b>Coração:</b> 4 cavidades separadas. Arco aórtico para a <b>DIREITA</b>.</p>
+                        <p><b>Respiração:</b> Possuem <b>Sacos Aéreos</b>. Fluxo contínuo. Não têm diafragma (nunca apertar o peito!).</p>
+                        <p><b>Excreção:</b> Uricotélicos. Ausência de bexiga (maioria).</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ABA 3: FLASHCARDS -->
+        <section id="tab-flashcards" class="tab-content">
+            <div class="text-center mb-6">
+                <h2 class="text-2xl font-black text-slate-800">Flashcards</h2>
+                <p class="text-sm text-slate-500">Toque no cartão para virar</p>
+            </div>
+
+            <div class="flip-container" id="flipContainer" onclick="toggleFlip()">
+                <div class="flipper">
+                    <!-- Frente -->
+                    <div class="front">
+                        <i id="fc-icon" class="fa-solid fa-question-circle text-4xl text-emerald-200 mb-4"></i>
+                        <h3 id="fc-question" class="text-xl font-bold leading-tight">Pergunta carregando...</h3>
+                    </div>
+                    <!-- Verso -->
+                    <div class="back overflow-y-auto no-scrollbar">
+                        <h3 id="fc-answer" class="text-xl font-black text-emerald-700 mb-3">Resposta...</h3>
+                        <p id="fc-extra" class="text-sm text-slate-600 italic">Dica extra...</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Controles Flashcards -->
+            <div class="flex justify-between items-center mt-8 px-4">
+                <button onclick="prevCard()" class="w-12 h-12 bg-white rounded-full shadow-md text-slate-600 flex items-center justify-center active:bg-slate-100"><i class="fa-solid fa-arrow-left"></i></button>
+                <div id="fc-counter" class="font-bold text-slate-400 text-sm tracking-widest">1 / X</div>
+                <button onclick="nextCard()" class="w-12 h-12 bg-emerald-600 rounded-full shadow-md text-white flex items-center justify-center active:bg-emerald-700"><i class="fa-solid fa-arrow-right"></i></button>
+            </div>
+        </section>
+
+        <!-- ABA 4: SIMULADO QUIZ -->
+        <section id="tab-quiz" class="tab-content">
+            <div id="quiz-intro">
+                <div class="bg-indigo-600 text-white p-6 rounded-3xl shadow-lg mb-6 text-center">
+                    <i class="fa-solid fa-graduation-cap text-4xl mb-3 text-indigo-200"></i>
+                    <h2 class="text-2xl font-black mb-2">Simulado USJT</h2>
+                    <p class="text-sm text-indigo-100 mb-6">5 questões baseadas nas provas anteriores do Professor Celso.</p>
+                    <button onclick="startQuiz()" class="bg-white text-indigo-600 font-bold py-3 px-8 rounded-full w-full shadow-md active:scale-95 transition-transform">INICIAR TESTE</button>
+                </div>
+            </div>
+
+            <div id="quiz-area" class="hidden">
+                <div class="flex justify-between text-xs font-bold text-slate-400 uppercase tracking-widest mb-4">
+                    <span id="quiz-progress">Questão 1/5</span>
+                    <span id="quiz-score" class="text-indigo-600">Pontos: 0</span>
+                </div>
+                
+                <div class="bg-white p-5 rounded-3xl shadow-sm border border-slate-100 mb-4">
+                    <h3 id="quiz-question" class="text-lg font-black text-slate-800 leading-snug">...</h3>
+                </div>
+
+                <div id="quiz-options" class="space-y-3">
+                    <!-- Botões injetados via JS -->
+                </div>
+            </div>
+
+            <div id="quiz-result" class="hidden text-center mt-10">
+                <i class="fa-solid fa-trophy text-6xl text-amber-400 mb-4"></i>
+                <h2 class="text-3xl font-black text-slate-800">Fim do Teste!</h2>
+                <p class="text-lg text-slate-600 mt-2">Acertaste <span id="final-score" class="font-bold text-emerald-600">X</span> de 5 questões.</p>
+                <button onclick="resetQuiz()" class="mt-8 bg-slate-800 text-white font-bold py-3 px-8 rounded-full shadow-md active:scale-95 transition-transform">TENTAR NOVAMENTE</button>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- NAVEGAÇÃO INFERIOR -->
+    <nav class="bg-white/90 backdrop-blur-xl border-t border-slate-200 fixed bottom-0 w-full max-w-md pb-[env(safe-area-inset-bottom,20px)] pt-3 px-4 z-50">
+        <div class="flex justify-between items-center">
+            <button onclick="nav('atividade')" id="nav-atividade" class="nav-btn active flex flex-col items-center gap-1 p-2 w-full">
+                <i class="fa-solid fa-file-pen text-xl"></i>
+                <span class="text-[10px] font-bold uppercase tracking-wider">Folha</span>
+            </button>
+            <button onclick="nav('classes')" id="nav-classes" class="nav-btn flex flex-col items-center gap-1 p-2 w-full">
+                <i class="fa-solid fa-layer-group text-xl"></i>
+                <span class="text-[10px] font-bold uppercase tracking-wider">Resumo</span>
+            </button>
+            <button onclick="nav('flashcards')" id="nav-flashcards" class="nav-btn flex flex-col items-center gap-1 p-2 w-full">
+                <i class="fa-solid fa-clone text-xl"></i>
+                <span class="text-[10px] font-bold uppercase tracking-wider">Cartas</span>
+            </button>
+            <button onclick="nav('quiz')" id="nav-quiz" class="nav-btn flex flex-col items-center gap-1 p-2 w-full">
+                <i class="fa-solid fa-gamepad text-xl"></i>
+                <span class="text-[10px] font-bold uppercase tracking-wider">Quiz</span>
+            </button>
+        </div>
+    </nav>
+
+    <!-- SCRIPTS MÁGICOS -->
+    <script>
+        // --- 1. NAVEGAÇÃO ENTRE ABAS ---
+        function nav(tabId) {
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('.nav-btn').forEach(el => el.classList.remove('active'));
+            
+            document.getElementById('tab-' + tabId).classList.add('active');
+            document.getElementById('nav-' + tabId).classList.add('active');
+            
+            document.getElementById('mainScroll').scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // --- 2. ACCORDION DAS CLASSES ---
+        function toggleAccordion(id) {
+            const el = document.getElementById(id);
+            const icon = document.getElementById('icon-' + id.split('-')[1]);
+            
+            if(el.classList.contains('hidden')) {
+                el.classList.remove('hidden');
+                icon.style.transform = 'rotate(180deg)';
+            } else {
+                el.classList.add('hidden');
+                icon.style.transform = 'rotate(0deg)';
+            }
+        }
+
+        // --- 3. LOGICA DOS FLASHCARDS ---
+        const flashcardsData = [
+            { i: "fa-heart-pulse", q: "Qual o erro na circulação de Répteis não-crocodilianos?", a: "Têm o Septo de Sabatier incompleto.", x: "Misturam sangue no ventrículo único." },
+            { i: "fa-lungs", q: "Por que aves respiram de forma mais eficiente?", a: "Possuem Sacos Aéreos.", x: "O ar flui sempre num único sentido, oxigenando na expiração também." },
+            { i: "fa-sun", q: "O que causa a Doença Metabólica Óssea em cativeiro?", a: "Falta de radiação UVB.", x: "Impede a síntese de D3 e absorção de Cálcio." },
+            { i: "fa-syringe", q: "Onde NUNCA aplicar injeção nefrotóxica num réptil?", a: "Membros pélvicos / Cauda.", x: "Devido ao Sistema Porta-Renal (vai direto pro rim)." },
+            { i: "fa-droplet", q: "Quem excreta Ácido Úrico?", a: "Aves e Répteis (Uricotélicos).", x: "Economiza água. Em excesso no sangue, causa Gota." }
+        ];
+        
+        let fcIndex = 0;
+        const flipContainer = document.getElementById('flipContainer');
+
+        function updateFlashcard() {
+            flipContainer.classList.remove('flipped');
+            setTimeout(() => {
+                document.getElementById('fc-icon').className = `fa-solid ${flashcardsData[fcIndex].i} text-4xl text-emerald-200 mb-4`;
+                document.getElementById('fc-question').innerText = flashcardsData[fcIndex].q;
+                document.getElementById('fc-answer').innerText = flashcardsData[fcIndex].a;
+                document.getElementById('fc-extra').innerText = flashcardsData[fcIndex].x;
+                document.getElementById('fc-counter').innerText = `${fcIndex + 1} / ${flashcardsData.length}`;
+            }, 300); // tempo de desvirar
+        }
+
+        function toggleFlip() { flipContainer.classList.toggle('flipped'); }
+        function nextCard() { fcIndex = (fcIndex + 1) % flashcardsData.length; updateFlashcard(); }
+        function prevCard() { fcIndex = (fcIndex - 1 + flashcardsData.length) % flashcardsData.length; updateFlashcard(); }
+        
+        updateFlashcard(); // Init
+
+        // --- 4. LÓGICA DO QUIZ ---
+        const quizData = [
+            {
+                q: "Qual característica é EXCLUSIVA do sistema circulatório das Aves quando comparado aos mamíferos?",
+                opts: ["Coração com 4 cavidades", "Arco aórtico para a direita", "Sangue não se mistura", "Circulação dupla"],
+                ans: 1
+            },
+            {
+                q: "Uma iguana precisa ser medicada com um antibiótico sabidamente nefrotóxico. Onde a medicação deve ser aplicada?",
+                opts: ["No músculo da coxa (membro pélvico)", "Na musculatura da base da cauda", "No membro torácico (dianteiro)", "Via intra-celomática"],
+                ans: 2 // Por causa do sistema porta-renal
+            },
+            {
+                q: "O acúmulo de cristais de Ácido Úrico nas articulações de répteis e aves é conhecido clinicamente como:",
+                opts: ["Doença Metabólica Óssea", "Gota Úrica / Gota Visceral", "Raquitismo", "Hipovitaminose A"],
+                ans: 1
+            },
+            {
+                q: "Como o Forame de Panizza funciona nos Crocodilianos?",
+                opts: ["Mistura sangue venoso e arterial dentro do coração", "Separa os átrios", "Mistura o sangue logo na saída do coração", "Conecta o pulmão aos sacos aéreos"],
+                ans: 2
+            },
+            {
+                q: "Na contenção física de um papagaio, a regra de ouro anatômica é:",
+                opts: ["Prender as patas com fita adesiva", "Nunca restringir o movimento do esterno/peito", "Colocar focinheira para evitar picadas", "Segurar pelo pescoço para evitar que voe"],
+                ans: 1
+            }
+        ];
+
+        let quizIndex = 0;
+        let score = 0;
+
+        function startQuiz() {
+            document.getElementById('quiz-intro').classList.add('hidden');
+            document.getElementById('quiz-area').classList.remove('hidden');
+            quizIndex = 0;
+            score = 0;
+            loadQuizQuestion();
+        }
+
+        function loadQuizQuestion() {
+            const data = quizData[quizIndex];
+            document.getElementById('quiz-progress').innerText = `Questão ${quizIndex + 1}/5`;
+            document.getElementById('quiz-score').innerText = `Pontos: ${score}`;
+            document.getElementById('quiz-question').innerText = data.q;
+            
+            const optionsDiv = document.getElementById('quiz-options');
+            optionsDiv.innerHTML = '';
+            
+            data.opts.forEach((opt, index) => {
+                const btn = document.createElement('button');
+                btn.className = "w-full text-left bg-white p-4 rounded-2xl shadow-sm border border-slate-100 font-semibold text-slate-700 active:bg-indigo-50 transition-colors";
+                btn.innerText = opt;
+                btn.onclick = () => checkAnswer(index, btn);
+                optionsDiv.appendChild(btn);
+            });
+        }
+
+        function checkAnswer(selectedIndex, btnElement) {
+            const correctIndex = quizData[quizIndex].ans;
+            const allBtns = document.getElementById('quiz-options').children;
+            
+            // Desativar botões
+            for(let b of allBtns) b.onclick = null;
+
+            if(selectedIndex === correctIndex) {
+                btnElement.classList.replace('border-slate-100', 'border-emerald-500');
+                btnElement.classList.replace('text-slate-700', 'text-emerald-700');
+                btnElement.classList.add('bg-emerald-50');
+                score++;
+            } else {
+                btnElement.classList.replace('border-slate-100', 'border-red-500');
+                btnElement.classList.replace('text-slate-700', 'text-red-700');
+                btnElement.classList.add('bg-red-50');
+                
+                // Mostrar a certa
+                allBtns[correctIndex].classList.replace('border-slate-100', 'border-emerald-500');
+                allBtns[correctIndex].classList.add('bg-emerald-50');
+            }
+
+            setTimeout(() => {
+                quizIndex++;
+                if(quizIndex < quizData.length) {
+                    loadQuizQuestion();
+                } else {
+                    showQuizResult();
+                }
+            }, 1500);
+        }
+
+        function showQuizResult() {
+            document.getElementById('quiz-area').classList.add('hidden');
+            document.getElementById('quiz-result').classList.remove('hidden');
+            document.getElementById('final-score').innerText = score;
+        }
+
+        function resetQuiz() {
+            document.getElementById('quiz-result').classList.add('hidden');
+            document.getElementById('quiz-intro').classList.remove('hidden');
+        }
+
+    </script>
+</body>
+</html>
+
+
+```
